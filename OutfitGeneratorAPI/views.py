@@ -1,6 +1,6 @@
 from django.http import JsonResponse
-from models import Piece, Outfit, User
-from serializer import PieceSerializer, OutfitSerializer
+from OutfitGeneratorAPI.models import Piece, Outfit, User
+from OutfitGeneratorAPI.serializer import PieceSerializer, OutfitSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status

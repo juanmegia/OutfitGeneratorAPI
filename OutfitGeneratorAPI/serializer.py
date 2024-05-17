@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from models import Piece
-from models import PieceCategory
-from models import Outfit
+from OutfitGeneratorAPI.models import Piece
+from OutfitGeneratorAPI.models import Outfit
 class PieceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Piece
