@@ -4,13 +4,13 @@ from OutfitGeneratorAPI.models import Outfit
 class PieceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Piece
-        fields = ['id', 'name', 'code', 'category', 'description', 'image' ]
+        fields = ['id', 'user','name', 'brand', 'style', 'category','size','description', 'image' ]
 class OutfitSerializer(serializers.ModelSerializer):
     pieces = PieceSerializer(many=True)
 
     class Meta:
         model = Outfit
-        fields = ['id', 'name', 'code', 'pieces']
+        fields = ['id', 'name', 'pieces']
 
     def create(self, validated_data):
         pieces_data = validated_data.pop('pieces')

@@ -21,8 +21,9 @@ from OutfitGeneratorAPI import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pieces/', views.piece_list),
-    path('pieces/<int:id>', views.piece_detail),
+    path('pieces/<uuid:id>', views.piece_detail),
     path('outfits/', views.outfit_list),
     path('outfits/create/', views.create_outfit),
     path('outfits/<uuid:outfit_id>/', views.update_outfit),
+    path('usuario/', views.create_user),
 ]

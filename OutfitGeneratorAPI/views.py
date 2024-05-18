@@ -1,11 +1,12 @@
 from django.http import JsonResponse
-from OutfitGeneratorAPI.models import Piece, Outfit, User
+from OutfitGeneratorAPI.models import Piece, Outfit
 from OutfitGeneratorAPI.serializer import PieceSerializer, OutfitSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 import json
 from random import sample
+from django.contrib.auth.models import User
 
 
 @api_view(['GET', 'POST'])
@@ -78,7 +79,9 @@ def outfit_list(request):
         serializer = OutfitSerializer(outfits, many=True)
         return JsonResponse({"outfits": serializer.data})
     else:
-        return Response({"message": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+        outfits = Outfit.objects.all()
+        serializer = OutfitSerializer(outfits, many=True)
+        return JsonResponse({"outfits": serializer.data})
 
 @api_view(['POST'])
 def create_outfit(request):
@@ -100,6 +103,26 @@ def update_outfit(request, outfit_id):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def create_user(request):
+    if request.method == 'POST':
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        # Validar que se proporcionen el nombre de usuario y la contraseña
+        if not username or not password:
+            return Response({"error": "Se requieren nombre de usuario y contraseña"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Crear el usuario
+        try:
+            user = User.objects.create_user(username=username, password=password)
+            user.save()
+            return Response({"message": "Usuario creado exitosamente"}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 def generate_outfit_view(request):
