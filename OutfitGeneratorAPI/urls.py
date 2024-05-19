@@ -23,6 +23,7 @@ urlpatterns = [
     path('pieces/', views.piece_list),
     path('pieces/<uuid:id>', views.piece_detail),
     path('outfits/', views.outfit_list),
+    path('piece_category', views.piece_category),
     path('outfits/create/', views.create_outfit),
     path('outfits/<uuid:outfit_id>/', views.update_outfit),
     path('usuario/', views.create_user),
