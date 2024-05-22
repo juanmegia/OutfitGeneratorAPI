@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from OutfitGeneratorAPI.models import Piece, Outfit
-from OutfitGeneratorAPI.serializer import PieceSerializer, OutfitSerializer
+from OutfitGeneratorAPI.serializer import PieceSerializer, OutfitSerializer, UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -46,7 +46,12 @@ def piece_detail(request, id):
     elif request.method == 'DELETE':
         piece.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
+@api_view(['GET'])
+def get_user_by_username(request):
+    username = request.data.get('username')
+    user = User.objects.filter(username=username)
+    serializer = UserSerializer(user)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def piece_category(request):

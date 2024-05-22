@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from OutfitGeneratorAPI.models import Piece
 from OutfitGeneratorAPI.models import Outfit
+from django.contrib.auth.models import User
 class PieceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Piece
@@ -19,3 +20,7 @@ class OutfitSerializer(serializers.ModelSerializer):
             Piece.objects.create(outfit=outfit, **piece_data)
         return outfit
             
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'password']

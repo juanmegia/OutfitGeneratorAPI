@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from OutfitGeneratorAPI import views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pieces/', views.piece_list),
@@ -27,4 +28,5 @@ urlpatterns = [
     path('outfits/create/', views.create_outfit),
     path('outfits/<uuid:outfit_id>/', views.update_outfit),
     path('usuario/', views.create_user),
+    path('users/', views.get_user_by_username)
 ]
