@@ -185,3 +185,5 @@ def generate_outfit(user_id, selected_style=None, selected_weather=None, selecte
     outfit_json = json.dumps(outfit)
 
     return outfit_json
+def welcome():
+    return "Welcome to OutfitGeneratorAPI"

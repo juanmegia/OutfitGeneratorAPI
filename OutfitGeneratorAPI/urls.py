@@ -20,7 +20,7 @@ from OutfitGeneratorAPI import views
 
 
 urlpatterns = [
-    path('/'),
+    path('/', views.welcome()),
     path('admin/', admin.site.urls),
     path('pieces/', views.piece_list),
     path('pieces/<uuid:id>', views.piece_detail),
