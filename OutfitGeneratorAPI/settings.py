@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-j%e5dq6e4)vg(qmk2%l@6iv%i$p$@!#xu1m+=wa2ed0y2^)*5_
 DEBUG = True
 
 ALLOWED_HOSTS = [
-'outfitgenerator.azurewebsites.net', 'localhost:8000']
+'outfitgenerator.azurewebsites.net', 'localhost']
 
 
 # Application definition
