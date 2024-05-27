@@ -112,7 +112,6 @@ def update_outfit(request, outfit_id):
 
 @api_view(['POST'])
 def create_user(request):
-    if request.method == 'POST':
         username = request.data.get('username')
         password = request.data.get('password')
 
