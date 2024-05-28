@@ -48,12 +48,14 @@ def piece_detail(request, id):
     elif request.method == 'DELETE':
         piece.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-@api_view(['GET'])
-def get_user_by_username(request):
-    username = request.data.get('username')
-    user = User.objects.filter(username=username)
-    serializer = UserSerializer(user)
-    return Response(serializer.data)
+class UserDetail(APIView):
+    def get(self, request, username, format=None):
+        try:
+            user = User.objects.get(username=username)
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def piece_category(request):
