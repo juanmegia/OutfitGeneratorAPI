@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class PieceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Piece
-        fields = ['id', 'user','name', 'brand', 'style', 'category','size','description', 'image' ]
+        fields = '__all__'
 class OutfitSerializer(serializers.ModelSerializer):
     pieces = PieceSerializer(many=True)
 

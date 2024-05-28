@@ -22,7 +22,7 @@ from OutfitGeneratorAPI.views import UserCreate, UserDetail
 urlpatterns = [
     path('', views.welcome),
     path('admin/', admin.site.urls),
-    path('pieces/', views.piece_list),
+    path('pieces/', views.piece_list, name='piece_list'),
     path('pieces/<uuid:id>', views.piece_detail),
     path('outfits/', views.outfit_list),
     path('piece_category', views.piece_category),

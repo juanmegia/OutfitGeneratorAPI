@@ -14,20 +14,22 @@ from django.contrib.auth.models import User
 @api_view(['GET', 'POST'])
 def piece_list(request):
     if request.method == 'GET':
-        user_id = request.query_params.get('user_id', None)
-        if user_id:
-            pieces = Piece.objects.filter(user_id=user_id)
+        username = request.query_params.get('username', None)
+        if username:
+            pieces = Piece.objects.filter(user__username=username)
         else:
             pieces = Piece.objects.all()
         serializer = PieceSerializer(pieces, many=True)
         return JsonResponse({"pieces": serializer.data})
+
     if request.method == 'POST':
         serializer = PieceSerializer(data=request.data)
         if serializer.is_valid():
-            user_id = request.data.get('user_id')  # Assuming user_id is passed in request data
-            user = User.objects.get(pk=user_id)
+            username = request.data.get('username')
+            user = User.objects.get(username=username)
             serializer.save(user=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
