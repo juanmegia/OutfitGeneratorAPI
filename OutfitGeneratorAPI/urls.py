@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from OutfitGeneratorAPI import views
-
+from OutfitGeneratorAPI.views import UserCreate
 
 urlpatterns = [
     path('', views.welcome),
@@ -28,6 +28,6 @@ urlpatterns = [
     path('piece_category', views.piece_category),
     path('outfits/create/', views.create_outfit),
     path('outfits/<uuid:outfit_id>/', views.update_outfit),
-    path('usuario/', views.create_user),
+    path('usuario/', UserCreate.as_view(), name='user-create'),
     path('users/', views.get_user_by_username)
 ]

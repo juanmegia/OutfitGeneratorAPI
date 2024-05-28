@@ -1,4 +1,6 @@
 from django.http import JsonResponse
+from rest_framework.views import APIView
+
 from OutfitGeneratorAPI.models import Piece, Outfit
 from OutfitGeneratorAPI.serializer import PieceSerializer, OutfitSerializer, UserSerializer
 from rest_framework.decorators import api_view
@@ -110,23 +112,13 @@ def update_outfit(request, outfit_id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
-def create_user(request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-
-        # Validar que se proporcionen el nombre de usuario y la contraseña
-        if not username or not password:
-            return Response({"error": "Se requieren nombre de usuario y contraseña"},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        # Crear el usuario
-        try:
-            user = User.objects.create_user(username=username, password=password)
-            user.save()
-            return Response({"message": "Usuario creado exitosamente"}, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+class UserCreate(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def generate_outfit_view(request):
