@@ -6,6 +6,7 @@ from OutfitGeneratorAPI.serializer import PieceSerializer, OutfitSerializer, Use
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.hashers import check_password, make_password
 import json
 from random import sample
 from django.contrib.auth.models import User
@@ -182,3 +183,22 @@ def generate_outfit(user_id, selected_style=None, selected_weather=None, selecte
     return outfit_json
 def welcome():
     return "Welcome to OutfitGeneratorAPI"
+
+
+class UserAuthentication(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        if not username or not password:
+            return Response({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username)
+            if check_password(password, user.password):
+                return Response({'message': 'User authenticated'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Incorrect password'}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            user = User.objects.create(username=username, password=make_password(password))
+            return Response({'message': 'User created'}, status=status.HTTP_201_CREATED)

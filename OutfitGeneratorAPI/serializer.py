@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from OutfitGeneratorAPI.models import Piece
 from OutfitGeneratorAPI.models import Outfit
@@ -23,8 +24,11 @@ class OutfitSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ['id', 'username', 'password']
 
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
+        user = User.objects.create(
+            username=validated_data['username'],
+            password=make_password(validated_data['password'])
+        )
         return user
