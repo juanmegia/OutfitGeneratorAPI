@@ -65,7 +65,7 @@ def piece_category(request):
     category = request.query_params.get('category', None)
     color = request.query_params.get('color', None)
     size = request.query_params.get('size', None)
-    user_id = request.query_params.get('user_id', None)
+    username = request.query_params.get('username', None)
 
     filters = {}
     if category:
@@ -74,8 +74,8 @@ def piece_category(request):
         filters['color'] = color
     if size:
         filters['size'] = size
-    if user_id:
-        filters['user_id'] = user_id
+    if username:
+        filters['username'] = username
 
     try:
         pieces = Piece.objects.filter(**filters)
