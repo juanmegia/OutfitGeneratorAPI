@@ -15,12 +15,24 @@ from django.contrib.auth.models import User
 
 class PieceListView(View):
     def get(self, request, *args, **kwargs):
+        # Retrieve the 'username' parameter from the GET request
         username = request.GET.get('username')
-        if username:
-            pieces = Piece.objects.filter(username=username)
-            pieces_list = list(pieces.values())
-            return JsonResponse(pieces_list, safe=False)
-        return JsonResponse({'error': 'Username parameter is missing or invalid'}, status=400)
+
+        if not username:
+            return JsonResponse({'error': 'Username parameter is missing or invalid'}, status=400)
+
+        try:
+            # Get the User object associated with the given username
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+
+        # Query the Piece model for objects matching the user
+        pieces = Piece.objects.filter(username=user)
+        # Convert the queryset to a list of dictionaries
+        pieces_list = list(pieces.values())
+        # Return the list as a JSON response
+        return JsonResponse(pieces_list, safe=False)
 
     def post(self, request, *args, **kwargs):
         serializer = PieceSerializer(data=request.data)
