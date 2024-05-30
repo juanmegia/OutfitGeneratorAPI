@@ -17,12 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from OutfitGeneratorAPI import views
-from OutfitGeneratorAPI.views import UserCreate, UserDetail, UserAuthentication
+from OutfitGeneratorAPI.views import UserCreate, UserDetail, UserAuthentication, PieceListView
 
 urlpatterns = [
     path('', views.welcome),
     path('admin/', admin.site.urls),
-    path('pieces/', views.piece_list, name='piece_list'),
+    path('pieces/', PieceListView.as_view(), name='piece_list'),
     path('pieces/<uuid:id>', views.piece_detail),
     path('outfits/', views.outfit_list),
     path('piece_category', views.piece_category),
