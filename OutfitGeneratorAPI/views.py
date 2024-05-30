@@ -21,12 +21,6 @@ class PieceListView(View):
         if not username:
             return JsonResponse({'error': 'Username parameter is missing or invalid'}, status=400)
 
-        try:
-            # Get the User object associated with the given username
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return JsonResponse({'error': 'User not found'}, status=404)
-
         # Query the Piece model for objects matching the user
         pieces = Piece.objects.filter(username=username)
         # Convert the queryset to a list of dictionaries
