@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.views import View
 from rest_framework.views import APIView
 
 from OutfitGeneratorAPI.models import Piece, Outfit
@@ -12,18 +13,16 @@ from random import sample
 from django.contrib.auth.models import User
 
 
-@api_view(['GET', 'POST'])
-def piece_list(request):
-    if request.method == 'GET':
-        username = request.query_params.get('username', None)
+class PieceListView(View):
+    def get(self, request, *args, **kwargs):
+        username = request.GET.get('username')
         if username:
             pieces = Piece.objects.filter(username=username)
-        else:
-            pieces = Piece.objects.all()
-        serializer = PieceSerializer(pieces, many=True)
-        return JsonResponse({"pieces": serializer.data})
+            pieces_list = list(pieces.values())
+            return JsonResponse(pieces_list, safe=False)
+        return JsonResponse({'error': 'Username parameter is missing or invalid'}, status=400)
 
-    if request.method == 'POST':
+    def post(self, request, *args, **kwargs):
         serializer = PieceSerializer(data=request.data)
         if serializer.is_valid():
             username = request.data.get('username')
@@ -128,25 +127,25 @@ class UserCreate(APIView):
 @api_view(['GET'])
 def generate_outfit_view(request):
     # Obtener parámetros de la solicitud
-    user_id = request.GET.get('user_id')
+    username = request.GET.get('username')
     selected_style = request.GET.get('style')
     selected_weather = request.GET.get('weather')
     selected_categories = request.GET.getlist('categories')
 
     # Validar que se proporcionen todos los parámetros necesarios
-    if not user_id or not selected_categories:
+    if not username or not selected_categories:
         return JsonResponse({"error": "Se requieren user_id y categories"}, status=400)
 
     # Generar el outfit
-    outfit = generate_outfit(user_id, selected_style, selected_weather, selected_categories)
+    outfit = generate_outfit(username, selected_style, selected_weather, selected_categories)
 
     if outfit:
         return JsonResponse({"outfit": outfit})
     else:
         return JsonResponse({"error": "No se pudieron encontrar suficientes piezas para generar un outfit"}, status=404)
-def generate_outfit(user_id, selected_style=None, selected_weather=None, selected_categories=None):
+def generate_outfit(username, selected_style=None, selected_weather=None, selected_categories=None):
     # Obtener todas las piezas del usuario
-    user_pieces = Piece.objects.filter(user_id=user_id)
+    user_pieces = Piece.objects.filter(username=username)
 
     # Filtrar piezas basadas en el estilo seleccionado
     if selected_style:
