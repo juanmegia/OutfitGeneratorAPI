@@ -17,7 +17,7 @@ def piece_list(request):
     if request.method == 'GET':
         username = request.query_params.get('username', None)
         if username:
-            pieces = Piece.objects.filter(user__username=username)
+            pieces = Piece.objects.filter(username=username)
         else:
             pieces = Piece.objects.all()
         serializer = PieceSerializer(pieces, many=True)
