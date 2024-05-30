@@ -32,7 +32,7 @@ class Piece(models.Model):
         ('GRAY', 'Gray'),
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.CharField(max_length=100,blank=True)
     name = models.CharField(max_length=100,blank=True, null= True)
     brand = models.CharField(max_length=100,blank=True, null= True)
     style = models.CharField(max_length=100,choices=STYLE_CHOICES, null =True)

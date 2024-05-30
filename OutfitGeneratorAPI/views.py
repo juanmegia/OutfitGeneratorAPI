@@ -28,7 +28,7 @@ class PieceListView(View):
             return JsonResponse({'error': 'User not found'}, status=404)
 
         # Query the Piece model for objects matching the user
-        pieces = Piece.objects.filter(username=user)
+        pieces = Piece.objects.filter(username=username)
         # Convert the queryset to a list of dictionaries
         pieces_list = list(pieces.values())
         # Return the list as a JSON response
