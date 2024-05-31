@@ -22,14 +22,12 @@ class PieceListView(View):
             return JsonResponse({'error': 'Username parameter is missing or invalid'}, status=400)
         # Query the Piece model for objects matching the user
         pieces = Piece.objects.filter(username=username)
-        # Convert the queryset to a list of dictionaries
+
+        # Use the serializer to convert the queryset to a list of dictionaries
         serializer = PieceSerializer(pieces, many=True)
-        response_data = {
-            'pieces': serializer.data
-        }
 
         # Return the list as a JSON response
-        return JsonResponse(response_data, safe=False)
+        return JsonResponse(serializer.data, safe=False)
         # Return the list as a JSON response
 
 
