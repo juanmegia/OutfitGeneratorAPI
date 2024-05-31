@@ -24,9 +24,14 @@ class PieceListView(View):
         pieces = Piece.objects.filter(username=username)
         # Convert the queryset to a list of dictionaries
         serializer = PieceSerializer(pieces, many=True)
+        response_data = {
+            'pieces': serializer.data
+        }
 
         # Return the list as a JSON response
-        return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(response_data, safe=False)
+        # Return the list as a JSON response
+
 
     def post(self, request, *args, **kwargs):
         serializer = PieceSerializer(data=request.data)
